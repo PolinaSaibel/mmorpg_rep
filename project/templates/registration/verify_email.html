@@ -1,0 +1,11 @@
+{% autoescape off %}
+
+Hi {{ user.get_username }},
+
+------------------------------------
+
+Перейдите по сылке ниже и введите пароль:
+{% url 'confirm_email' %}
+id:  {{ user_id }}
+code:  {{code}}
+{% endautoescape %}
