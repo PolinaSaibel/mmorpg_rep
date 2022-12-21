@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+News
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+<h1> Posts</h1>
+
+    {% for post in posts %}
+    <table align="center">
+        <td>
+            <tr>
+            <h2>{{post.title}}</h2>
+            </tr>
+       
+        <tr>
+           
+          <h3><img src="{{post.author.avatar.url}}" class="img-fluid" alt="" width=100px height=100px>|
+           {{post.author}}</h3>
+            
+        </tr>
+         </td>
+        <tr>
+
+        <td>
+            {{post.text}}
+        </td>
+        </tr>
+    </table>
+        <div class="men-thumb-item">
+            <img src="{{post.image.url}}" class="img-fluid" alt="">
+        </div> 
+        <hr>
+        <video width="" controls>
+            <source src="{{post.video.url}}" type="video/mp4">
+        <hr>    
+        {%endfor%}
+
+
+
+{%endblock content%}

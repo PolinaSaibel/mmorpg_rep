@@ -4,15 +4,29 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>User authenticate</title>
+    {% load static %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
 </head>
 <body class="container">
 <ul class="list-group">
-    <li class="list-group-item">
-        User: {{ user }}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top"></nav>
+    <li class="list-group-item" align="right">
+        <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+
+        <li class="list-group-item" align="right">
+            {% if user.is_authenticated %}
+            {{user.username}}
+            <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+            <a class="navbar-brand" href="{% url 'login' %}">Login</a> |
+            <a class="navbar-brand" href="{% url 'register' %}">Register</a>
+            {% endif %}
+                        
+
+
+        </li>
     </li>
-    <li class="list-group-item">
-        <a href="{% url 'home' %}">Home</a>
-    </li>
+    </nav>    
 </ul>
 
 {% block content %}
