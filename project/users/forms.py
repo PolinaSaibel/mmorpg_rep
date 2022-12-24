@@ -5,7 +5,7 @@ from django.contrib.auth.forms import (
 )
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
+# from django.utils.translation import gettext_lazy as _
 
 from users.utils import send_email_for_verify
 
@@ -41,7 +41,7 @@ class AuthenticationForm(DjangoAuthenticationForm):
 
 class UserCreationForm(DjangoUserCreationForm):
     email = forms.EmailField(
-        label=_("Email"),
+        label="Email",
         max_length=254,
         widget=forms.EmailInput(attrs={'autocomplete': 'email'})
     )

@@ -24,15 +24,15 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('home/', TemplateView.as_view(template_name='home.html'), name='home'),
     path('users/', include('users.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('posts/', include('news.urls'))
+    path('', include('news.urls'))
 
 ]
 
 urlpatterns += i18n_patterns(
-    path('posts/', include('news.urls')),
+    path('', include('news.urls')),
 )
 
 if settings.DEBUG:

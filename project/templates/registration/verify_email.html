@@ -5,7 +5,7 @@ Hi {{ user.get_username }},
 ------------------------------------
 
 Перейдите по сылке ниже и введите пароль:
-{% url 'confirm_email' %}
+<a href="{% url 'confirm_email' %}"></a>"
 id:  {{ user_id }}
 code:  {{code}}
 {% endautoescape %}

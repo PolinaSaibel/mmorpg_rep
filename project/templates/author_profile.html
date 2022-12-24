@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
@@ -11,6 +10,7 @@
 <h5>E-mail: {{user.email}}</h5>
 
 <p>Мои посты:</p>
+{{author.post_author.all}}
 <p>Откликина мои посты:</p>
 <p>мои отклики:</p>
 

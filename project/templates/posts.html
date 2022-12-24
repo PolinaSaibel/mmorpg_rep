@@ -12,16 +12,19 @@ News
     <table align="center">
         <td>
             <tr>
-            <h2>{{post.title}}</h2>
+            <h2><a  href="/{{ post.id }}">{{post.title}}</a></h2>
             </tr>
        
         <tr>
-           
-          <h3><img src="{{post.author.avatar.url}}" class="img-fluid" alt="" width=100px height=100px>|
-           {{post.author}}</h3>
+            {%if post.author.avatar%}
+            <h3><img src="{{post.author.avatar.url}}" class="img-fluid" alt="" width=100px height=100px>|
+            {%endif%}
+            {{post.author}}</h3>
             
         </tr>
          </td>
+         
+         </tr>
         <tr>
 
         <td>
@@ -29,12 +32,16 @@ News
         </td>
         </tr>
     </table>
+        {%if post.image %}
         <div class="men-thumb-item">
             <img src="{{post.image.url}}" class="img-fluid" alt="">
         </div> 
+        {%endif%}
         <hr>
+        {%if post.video %}
         <video width="" controls>
             <source src="{{post.video.url}}" type="video/mp4">
+        {%endif%}
         <hr>    
         {%endfor%}
 
