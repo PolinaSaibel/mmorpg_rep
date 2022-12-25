@@ -7,6 +7,7 @@ from .forms import PostCreateForm, ResponseForm, AuthorForm
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 # User = get_user_model()
 
@@ -86,10 +87,19 @@ class PostDetail(FormMixin, DetailView, ):
         self.object.post = self.get_object()
         self.object.save()
         return super().form_valid(form)
+    
+    # def get_queryset(self, **kwargs):
+    #     pk = self.kwargs.get('pk')
+    #     user = self.request.user
+    #     author = Post.objects.get(id=pk).author
+
+    #     queryset = Response.objects.filter(post=pk)
+    #     return queryset
+
+
 
     def get_context_data( self,  **kwargs, ):
         context = super().get_context_data()
-
         return context       
 
 
@@ -115,6 +125,54 @@ class ResponseCreation():
     pass
 
 
+@login_required
+def response_accept(request,  pk, **kwargs):
+    """принятие отклика"""
+    user=request.user
+    print("user", user)
+    id=pk
+    print('id', id)
+    # pk=отклик
+    post_id = Response.objects.get(id=id).post
+    print('post', post_id)
+    postid=post_id.id
+    print('post_id', postid)
+    author = Post.objects.get(id=postid).author
+    print("author", author)
+    if author:
+        # не делает проверку author==user
+        print('if_work')
+        response = Response.objects.get(id=id)
+        print('resp', response)
+        response.status = True
+        response.save()
+        print('resp_new_status', response.status)
+        # respond_accept_send_email.delay(response_id=response.id)
+        return redirect('posts')
+    else:
+        return redirect('posts')
+
+@login_required
+def response_delete(request, pk, **kwargs):
+    user=request.user
+    # print("user", user)
+    id=pk
+    # print('id', id)
+    # pk=отклик
+    post_id = Response.objects.get(id=id).post
+    # print('post', post_id)
+    postid=post_id.id
+    # print('post_id', postid)
+    author = Post.objects.get(id=postid).author
+    # print("author", author)
+    if author:
+        response = Response.objects.get(id=id)
+        response.delete()
+        return redirect('/')
+    else:
+        return redirect('/')
+
+
 class AuthorDetail(DetailView, LoginRequiredMixin):
     """профиль пользрвателя"""
     model = Author
@@ -133,6 +191,5 @@ class AuthorUpdate(UpdateView, LoginRequiredMixin,):
     """обновление профиля"""
     form_class = AuthorForm
     model = Author
-    template_name = 'author_create.html'
-    success_url = reverse_lazy('author_profile')
-
+    template_name = 'author_edit.html'
+    success_url = reverse_lazy('posts')

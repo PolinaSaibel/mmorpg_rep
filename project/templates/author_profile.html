@@ -3,15 +3,36 @@
 {% block content %}
 
 <h3>Ваш профиль: </h3>
-<br>
-<h5>User name: {{user.username}}</h5>
-<h5>Last name: {{user.last_name}}</h5>
-<h5>First name: {{user.first_name}}</h5>
-<h5>E-mail: {{user.email}}</h5>
+<br>{%if author.avatar %}
+<div class="men-thumb-item">
+    <img src="{{author.avatar.url}}" class="img-fluid" width=150px height=50px alt="">
+</div> 
+{%endif%}
+<h5>User name: <u>{{user.username}}</u></h5>
+<h5>Last name:<u> {{user.last_name}}</u></h5>
+<h5>First name: <u>{{user.first_name}}</u></h5>
+<h5>E-mail: <u>{{user.email}}</u></h5>
+<h5>bio:<u> {{author.bio}}</u></h5>
+<p><h5>Мои посты:</h5></p>
+{% for post in author.post_author.all%}
 
-<p>Мои посты:</p>
-{{author.post_author.all}}
-<p>Откликина мои посты:</p>
-<p>мои отклики:</p>
+    <h6><a  href="/{{ post.id }}">{{post.title}}</a></h6></tr>
+    <p>откликлв: ({{post.responses.all.count}})</p><br>
+    {% for resp in post.responses.all %}
+    <p><h6>{{resp.author}}</h5></p>
+        <p >{{resp.text}}</p>
+        <p>{{resp.time_creation}}</p>
+        <p >{{resp.status}}</p>
+        <p> <a href="{% url 'response_accept' resp.id %}"  class="btn btn-success">
+            Подтвердить
+        </a> |
+        <a href="{% url 'response_del' resp.id %}"  class="btn btn-danger">
+            удалить
+        </a></p><hr>
+    {%endfor%}
+    <hr><hr>
+
+{%endfor%}
+
 
 {% endblock %}

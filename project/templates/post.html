@@ -31,9 +31,11 @@
 <p>Отклики:</p>
 {{post.responses.all}}
 {% for resp in post.responses.all %}
-    <p><h6 align="left">{{resp.author}}</h5></p>
+    {% if resp.status is True %}
+    <p align="left"><h6 >{{resp.author}}</h6></p>
     <p align="left">{{resp.text}}</p>
-    <p align="right">{{resp.time_creation}}</p>
+    <p align="right"><i>{{resp.time_creation}}</i></p>
+    {%endif%}
 
 {%endfor%}
 {% if request.user.is_authenticated %}
