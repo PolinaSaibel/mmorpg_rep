@@ -7,6 +7,7 @@ from .views import *
 
 urlpatterns = [
     path('', PostList.as_view(), name='posts' ),
+    path('week/', WeekView.as_view()), #еженедеьная рассылка
     path('post_create/',  PostCreation.as_view(), name='post_create'),
     path('<int:pk>', PostDetail.as_view(), name='post'),
     path('<int:pk>/delete/', PostDelete.as_view(), name='post_delete'),

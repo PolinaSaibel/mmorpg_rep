@@ -16,21 +16,27 @@
 <p><h5>Мои посты:</h5></p>
 {% for post in author.post_author.all%}
 
-    <h6><a  href="/{{ post.id }}">{{post.title}}</a></h6></tr>
-    <p>откликлв: ({{post.responses.all.count}})</p><br>
+    <h3><a  href="/{{ post.id }}">{{post.title}}</a></h3></tr>
+    <p> <a href="{% url 'post_update' post.id %}"  class="btn btn-dark">
+        Изменить
+    </a> <a href="{% url 'post_delete' post.id %}"  class="btn btn-danger">
+        удалить
+    </a></p>
+    <p><h5>откликлв: ({{post.responses.all.count}})</h5></p><hr ><br>
     {% for resp in post.responses.all %}
-    <p><h6>{{resp.author}}</h5></p>
-        <p >{{resp.text}}</p>
+    <p><h6>Автор: <u>{{resp.author}}</u></h6></p>
+        <p ><h4>{{resp.text}}</h4></p>
         <p>{{resp.time_creation}}</p>
-        <p >{{resp.status}}</p>
+        <p >Status: {{resp.status}}</p>
+        {%if resp.status is Fulse%}
         <p> <a href="{% url 'response_accept' resp.id %}"  class="btn btn-success">
             Подтвердить
-        </a> |
+        </a> | {%endif%}
         <a href="{% url 'response_del' resp.id %}"  class="btn btn-danger">
             удалить
         </a></p><hr>
     {%endfor%}
-    <hr><hr>
+
 
 {%endfor%}
 

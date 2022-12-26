@@ -1,0 +1,12 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2> Посты за прошедшую неделю!</h2>
+    {%for post in posts%}
+    <p>{{post.title}}</p>
+    <p align="right"> {{post.autor}}</p>
+    <p><a href="http://127.0.0.1:8000/{{post.id}}"> Read this post</a></p>
+    {% endfor %}
+
+{% endblock %}

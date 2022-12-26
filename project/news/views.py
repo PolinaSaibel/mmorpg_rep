@@ -8,12 +8,21 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
-
+import time
+from datetime import datetime, timedelta
+from .tasks import respond_accept_send_email, respond_del_send_email, new_response, notify_sub_weekly
 # User = get_user_model()
 
 
 # Create your views here.
 
+class WeekView(View):
+    """еженедельная рассылка"""
+    def get(self, request):
+        print('weekview work')
+        notify_sub_weekly.delay()
+        print('celery work')
+        return redirect("/")
 
 class PostList(ListView):
     """ вывод всех новостей """
@@ -86,17 +95,11 @@ class PostDetail(FormMixin, DetailView, ):
         self.object.author = self.request.user
         self.object.post = self.get_object()
         self.object.save()
+        id = self.object.id
+        print("post_id", id)
+        new_response.delay(id=id)
         return super().form_valid(form)
     
-    # def get_queryset(self, **kwargs):
-    #     pk = self.kwargs.get('pk')
-    #     user = self.request.user
-    #     author = Post.objects.get(id=pk).author
-
-    #     queryset = Response.objects.filter(post=pk)
-    #     return queryset
-
-
 
     def get_context_data( self,  **kwargs, ):
         context = super().get_context_data()
@@ -129,31 +132,28 @@ class ResponseCreation():
 def response_accept(request,  pk, **kwargs):
     """принятие отклика"""
     user=request.user
-    print("user", user)
+    # print("user", user)
     id=pk
-    print('id', id)
+    # print('id', id)
     # pk=отклик
     post_id = Response.objects.get(id=id).post
-    print('post', post_id)
+    # print('post', post_id)
     postid=post_id.id
-    print('post_id', postid)
+    # print('post_id', postid)
     author = Post.objects.get(id=postid).author
-    print("author", author)
-    if author:
-        # не делает проверку author==user
-        print('if_work')
-        response = Response.objects.get(id=id)
-        print('resp', response)
-        response.status = True
-        response.save()
-        print('resp_new_status', response.status)
-        # respond_accept_send_email.delay(response_id=response.id)
-        return redirect('posts')
-    else:
-        return redirect('posts')
+    # print("author", author)
+    # print('if_work')
+    response = Response.objects.get(id=id)
+    # print('resp', response)
+    response.status = True
+    response.save()
+    print('resp_new_status', response.status)
+    respond_accept_send_email.delay(id=response.id)
+    return redirect('/author/'+ str(author.id))
 
 @login_required
 def response_delete(request, pk, **kwargs):
+    """отклонить/удалить отклик"""
     user=request.user
     # print("user", user)
     id=pk
@@ -165,12 +165,10 @@ def response_delete(request, pk, **kwargs):
     # print('post_id', postid)
     author = Post.objects.get(id=postid).author
     # print("author", author)
-    if author:
-        response = Response.objects.get(id=id)
-        response.delete()
-        return redirect('/')
-    else:
-        return redirect('/')
+    response = Response.objects.get(id=id)
+    response.delete()
+    respond_del_send_email.delay(id=response.id)
+    return redirect('/author/'+ str(author.id))
 
 
 class AuthorDetail(DetailView, LoginRequiredMixin):

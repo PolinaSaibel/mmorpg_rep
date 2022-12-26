@@ -32,6 +32,7 @@
 {{post.responses.all}}
 {% for resp in post.responses.all %}
     {% if resp.status is True %}
+    
     <p align="left"><h6 >{{resp.author}}</h6></p>
     <p align="left">{{resp.text}}</p>
     <p align="right"><i>{{resp.time_creation}}</i></p>

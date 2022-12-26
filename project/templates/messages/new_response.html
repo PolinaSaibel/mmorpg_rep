@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <p>{{respond_author}} оставил отклик на ваш пост <a  href="/{{ post_id }}">{{post_title}}</a></p>
+        <p>{{respond_text}}</p>
+    </div>
+{% endblock %}
