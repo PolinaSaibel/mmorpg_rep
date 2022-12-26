@@ -10,7 +10,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.decorators import login_required
 import time
 from datetime import datetime, timedelta
+from project.settings import MEDIA_ROOT
 from .tasks import respond_accept_send_email, respond_del_send_email, new_response, notify_sub_weekly
+import mimetypes
+from pathlib import Path
+from django.http.response import HttpResponse
+
 # User = get_user_model()
 
 
@@ -106,7 +111,6 @@ class PostDetail(FormMixin, DetailView, ):
         return context       
 
 
-
 class PostUpdate(UpdateView, LoginRequiredMixin,):
     """обновление поста"""
     form_class = PostCreateForm
@@ -121,11 +125,6 @@ class PostDelete(DeleteView, LoginRequiredMixin,):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('posts')
-
-
-class ResponseCreation():
-    """создание отклика"""
-    pass
 
 
 @login_required

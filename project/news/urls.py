@@ -16,5 +16,6 @@ urlpatterns = [
     path('author/<int:pk>/edit/', AuthorUpdate.as_view(), name='author_update'),
     # принятие отклика
     path('response_accept/<int:pk>/', response_accept, name='response_accept'),
-    path('response_del/<int:pk>/', response_delete, name='response_del')
+    path('response_del/<int:pk>/', response_delete, name='response_del'),
+
 ]

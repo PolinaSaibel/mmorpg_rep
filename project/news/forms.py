@@ -12,7 +12,7 @@ class PostCreateForm(forms.ModelForm):
             'text',
             'image',
             'video',
-            'docx',
+            
             'category'
             ]
 

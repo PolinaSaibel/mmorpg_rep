@@ -34,7 +34,7 @@ class Post(models.Model):
     text =models.TextField()
     image = models.FileField(upload_to='files/', null=True, blank=True)
     video = models.FileField(upload_to='files/', null=True, blank=True)
-    docx = models.FileField(upload_to='files/', null=True, blank=True)
+    # docx = models.FileField(upload_to='files/', null=True, blank=True)
     time_creation = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=50, choices=CAT, default='tanks', verbose_name='Категории')
 
